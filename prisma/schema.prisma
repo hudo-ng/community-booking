@@ -28,6 +28,8 @@ model User {
   UserId String @id @default(uuid())
   email String @unique
   name String?
+  slug String? @unique
+  passwordHash String?
   role Role @default(CUSTOMER)
   services Service[]
   createdAt DateTime @default(now())

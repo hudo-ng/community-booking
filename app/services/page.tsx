@@ -15,7 +15,7 @@ export default async function ServicePage() {
         {services.map((service) => (
           <Link
             key={service.id}
-            href={`providers/${service.providerId}/services/${service.slug}`}
+            href={`providers/${service.provider.slug}/services/${service.slug}`}
             className="card block hover:shadow"
           >
             {service.imageUrl && <img src={service.imageUrl} alt="" />}

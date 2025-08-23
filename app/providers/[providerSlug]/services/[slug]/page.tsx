@@ -3,15 +3,20 @@ import { prisma } from "../../../../../lib/db";
 
 type Props = {
   params: {
-    providerId: string;
+    providerSlug: string;
     slug: string;
   };
 };
 export async function generateMetaData({ params }: Props) {
+  const provider = await prisma.user.findUnique({
+    where: { slug: params.providerSlug },
+  });
+  if (!provider) return { title: "Service" };
+
   const service = await prisma.service.findUnique({
     where: {
       providerId_slug: {
-        providerId: params.providerId,
+        providerId: provider.UserId,
         slug: params.slug,
       },
     },
@@ -20,10 +25,15 @@ export async function generateMetaData({ params }: Props) {
 }
 
 export default async function ServiceDetail({ params }: Props) {
+  const provider = await prisma.user.findUnique({
+    where: { slug: params.providerSlug },
+  });
+  if (!provider) return NotFound();
+
   const service = await prisma.service.findUnique({
     where: {
       providerId_slug: {
-        providerId: params.providerId,
+        providerId: provider.UserId,
         slug: params.slug,
       },
     },

@@ -10,6 +10,7 @@ async function main() {
       email: "alice@demo.dev",
       name: "Alice Barber",
       role: "PROVIDER",
+      slug: "alice-barber",
     },
   });
 
