@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "@/components/Header";
 import SiteFooter from "@/components/Footer";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth.config";
+import AuthContextProvider from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,19 +38,22 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <SiteHeader />
-        <main className="page py-8 flex-1">{children}</main>
-        <SiteFooter />
+        <AuthContextProvider session={session}>
+          <SiteHeader />
+          <main className="page py-8 flex-1">{children}</main>
+          <SiteFooter />
+        </AuthContextProvider>
       </body>
     </html>
   );

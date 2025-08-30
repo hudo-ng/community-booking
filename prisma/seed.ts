@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const db = new PrismaClient();
 
@@ -11,6 +12,7 @@ async function main() {
       name: "Alice Barber",
       role: "PROVIDER",
       slug: "alice-barber",
+      passwordHash: await bcrypt.hash("alice12345@", 10),
     },
   });
 

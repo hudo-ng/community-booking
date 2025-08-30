@@ -10,13 +10,14 @@ const LoginSchema = z.object({
 });
 
 export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: "jwt" },
   providers: [
     Credentials({
       name: "Email & Password",
       credentials: {
-        email: {},
-        password: {},
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(raw) {
         const { email, password } = LoginSchema.parse(raw);
@@ -46,8 +47,8 @@ export const authOptions: NextAuthOptions = {
 
     async session({ session, token }) {
       if (session.user) {
-        (session.user as any).id = token.id;
-        (session.user as any).role = token.role;
+        (session.user as any).id = token.id as string;
+        (session.user as any).role = token.role as "CUSTOMER" | "PROVIDER";
       }
       return session;
     },
