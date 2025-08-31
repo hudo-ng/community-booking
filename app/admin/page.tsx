@@ -7,7 +7,6 @@ export default async function AdminPage() {
   const session = await getServerSession(authOptions);
   if (!session?.user) redirect("/login");
   if (session.user.role !== "PROVIDER") redirect("/");
-  console.log(session);
 
   const services = await prisma.service.findMany({
     where: { providerId: session.user.id },
