@@ -21,7 +21,7 @@ export default async function AdminPage() {
           <a
             key={s.id}
             className="card block hover:shadow"
-            href={`/providers/${s.provider.UserId}/services/${s.slug}`}
+            href={`/providers/${s.provider.slug}/services/${s.slug}`}
           >
             <h3 className="text-lg font-semibold">{s.title}</h3>
             <p className="text-sm text-gray-600">${s.price}</p>

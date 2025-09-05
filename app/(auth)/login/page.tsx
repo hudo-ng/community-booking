@@ -1,6 +1,7 @@
 "use client";
 
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
 
@@ -20,6 +21,7 @@ function SubmitBtn() {
 export default function LogInPage() {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const router = useRouter();
 
   async function onSubmit(e: React.FormEvent<HTMLElement>) {
     e.preventDefault();
@@ -40,12 +42,11 @@ export default function LogInPage() {
       password,
     });
 
-    console.log(res);
-
     if (res?.error) {
       setErr("Invalid email or password");
+      setLoading(false);
     } else if (res?.ok) {
-      window.location.assign("/admin");
+      router.push("/admin");
     }
   }
 
