@@ -34,6 +34,28 @@ model User {
   services Service[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  timezone String @default("America/Edmonton")
+  availability AvailabilityRules[]
+  timeOff TimeOff[]
+}
+
+model AvailabilityRules {
+  id String @id @default(uuid())
+  provider User @relation(references: [UserId], fields: [providerId])
+  providerId String
+  weekday Int
+  startLocal String
+  endLocal String
+  slotMins Int @default(60)
+}
+
+model TimeOff {
+  id String @id @default(uuid())
+  startTimeUtc DateTime
+  endTimeUtc DateTime
+  reason String?
+  provider User @relation(references: [UserId], fields: [providerId])
+  providerId String
 }
 
 model Service {
@@ -47,6 +69,7 @@ model Service {
   provider User @relation(fields: [providerId], references: [UserId], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  defaultDurationMins Int? @default(60)
 
   Booking Booking[]
   @@unique([providerId, slug])
@@ -64,6 +87,8 @@ model Booking {
   customerPhone String?
   notes String?
   createdAt DateTime @default(now())
+  idempotencyKey String? @unique
+
   @@index([serviceId, startAt])
   @@index([serviceId, endAt])
 }

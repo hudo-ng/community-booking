@@ -1,6 +1,9 @@
 import NotFound from "@/app/not-found";
 import { prisma } from "../../../../../lib/db";
 import BookingWidget from "@/components/BookingWidget";
+import { generateSlots } from "@/lib/availability";
+import { addDays, format } from "date-fns";
+import Slots from "@/components/Slots";
 
 type Props = {
   params: {
@@ -52,6 +55,25 @@ export default async function ServiceDetail({ params }: Props) {
     currency: "CAD",
     maximumFractionDigits: 2,
   }).format(service.price ?? 0);
+
+  const providerTz = service.provider?.timezone ?? "America/Edmonton";
+  const duration = service.defaultDurationMins ?? 60;
+
+  const days = await Promise.all(
+    Array.from({ length: 14 }).map(async (_, i) => {
+      const d = addDays(new Date(), i);
+      const ymd = format(d, "yyyy-MM-dd");
+      const iso = await generateSlots({
+        providerId: service.providerId,
+        serviceId: service.id,
+        providerTz: providerTz,
+        date: ymd,
+        durationMins: duration,
+        leadMinutes: 60,
+      });
+      return { ymd, iso };
+    })
+  );
 
   return (
     <article className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
@@ -142,6 +164,8 @@ export default async function ServiceDetail({ params }: Props) {
               </a>
             </div>
           </div>
+
+          <Slots days={days} providerTz={providerTz} />
 
           <div className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm">
             <BookingWidget

@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect } from "react";
 import createBooking from "@/app/bookings/action";
 import type { BookingState } from "@/app/bookings/action";
 
@@ -30,6 +30,25 @@ export default function BookingWidget(props: {
   defaultDuration?: number;
 }) {
   const [state, formAction] = useActionState(createBooking, initialState);
+
+  useEffect(() => {
+    const handler = (e: any) => {
+      const iso = e.detail?.isoUtc as string;
+      if (!iso) return;
+      const d = new Date(iso);
+      const pad = (n: number) => String(n).padStart(2, "0");
+      const value =
+        `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}` +
+        `T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      const input = document.querySelector<HTMLInputElement>(
+        'input[name="startAt"]'
+      );
+      if (input) input.value = value; // sets the datetime-local control
+    };
+    window.addEventListener("set-booking-start", handler as any);
+    return () =>
+      window.removeEventListener("set-booking-start", handler as any);
+  }, []);
 
   return (
     <div

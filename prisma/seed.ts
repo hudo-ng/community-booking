@@ -45,6 +45,17 @@ async function main() {
       providerId: alice.UserId,
     },
   });
+
+  const workDays = [1, 2, 3, 4, 5, 6];
+  await db.availabilityRules.createMany({
+    data: workDays.map((wd) => ({
+      providerId: alice.UserId,
+      startLocal: "08:00",
+      endLocal: "18:00",
+      weekday: wd,
+      slotMins: 60,
+    })),
+  });
 }
 
 main()
