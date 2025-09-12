@@ -43,7 +43,7 @@ export default function BookingWidget(props: {
       const input = document.querySelector<HTMLInputElement>(
         'input[name="startAt"]'
       );
-      if (input) input.value = value; // sets the datetime-local control
+      if (input) input.value = value;
     };
     window.addEventListener("set-booking-start", handler as any);
     return () =>
