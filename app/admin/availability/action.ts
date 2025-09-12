@@ -128,7 +128,7 @@ export async function addTimeOff(fd: FormData): Promise<void> {
 export async function deleteTimeOff(fd: FormData): Promise<void> {
   const user = await requireProviderSession();
   const id = String(fd.get("id") ?? "");
-  if (!id || id !== user.id) return;
+  if (!id) return;
 
   const row = await prisma.timeOff.findUnique({ where: { id } });
   if (!row || row.providerId !== user.id) return;
