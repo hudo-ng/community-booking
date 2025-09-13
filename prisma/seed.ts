@@ -1,9 +1,31 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { config } from "dotenv";
+import path from "node:path";
 
 const db = new PrismaClient();
 
+config({ path: path.resolve(process.cwd(), ".env") });
+
 async function main() {
+  const superAd = process.env.SUPER_ADMIN_EMAIL!;
+  const superAdPass = process.env.SUPER_ADMIN_PASS!;
+
+  if (!superAd || !superAdPass)
+    throw new Error("Error from super admin credentials");
+
+  await db.user.upsert({
+    where: { email: superAd },
+    update: {},
+    create: {
+      email: superAd,
+      name: "Super Admin",
+      role: "SUPERADMIN",
+      slug: "super-admin",
+      passwordHash: await bcrypt.hash(superAdPass, 12),
+    },
+  });
+
   const alice = await db.user.upsert({
     where: { email: "alice@demo.dev" },
     update: {},

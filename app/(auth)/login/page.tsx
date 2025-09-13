@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
@@ -37,7 +37,6 @@ export default function LogInPage() {
 
     const res = await signIn("credentials", {
       redirect: false,
-      callbackUrl: "/admin",
       email,
       password,
     });
@@ -46,7 +45,12 @@ export default function LogInPage() {
       setErr("Invalid email or password");
       setLoading(false);
     } else if (res?.ok) {
-      router.push("/admin");
+      const session = await getSession();
+      session?.user.role === "CUSTOMER"
+        ? router.push("/")
+        : session?.user.role === "SUPERADMIN"
+        ? router.push("/root/users")
+        : router.push("/admin");
     }
   }
 
