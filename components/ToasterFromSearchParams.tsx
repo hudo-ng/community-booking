@@ -9,7 +9,7 @@ function Toast({
   onClose,
 }: {
   message: string;
-  type: "success" | "error";
+  type: "success" | "error" | "info";
   onClose: () => void;
 }) {
   useEffect(() => {
@@ -41,30 +41,35 @@ function Toast({
   );
 }
 
+type ToastType = "success" | "error" | "info";
+
 export default function ToasterFromSearchParams() {
   const sp = useSearchParams();
   const router = useRouter();
 
   const message = sp.get("m");
-  const type = (sp.get("t") as "success" | "error" | null) ?? null;
-  const [open, setOpen] = useState<boolean>(Boolean(message));
+  const typeParam = sp.get("t");
+  const type: ToastType | null =
+    typeParam === "success" || typeParam === "error" || typeParam === "info"
+      ? (typeParam as ToastType)
+      : null;
 
-  useEffect(() => setOpen(Boolean(message)), [message]);
+  const [open, setOpen] = useState(Boolean(message && type));
 
-  useEffect(() => {
-    if (!message || !open) return;
-    const id = setTimeout(() => {
-      setOpen(false);
-      router.replace("/root/users");
-    }, 3000);
-    return () => clearTimeout(id);
-  }, [open, message, router]);
+  useEffect(() => setOpen(Boolean(message && type)), [message, type]);
 
   const close = useMemo(
     () => () => {
-      setOpen(false), router.replace("/root/users");
+      setOpen(false);
+      const params = new URLSearchParams(Array.from(sp.entries()));
+      params.delete("m");
+      params.delete("t");
+      const qs = params.toString();
+      router.replace(`${window.location.pathname}${qs ? `?${qs}` : ""}`, {
+        scroll: false,
+      });
     },
-    [router]
+    [sp, router]
   );
 
   if (!open || !message || !type) return null;

@@ -210,7 +210,6 @@ export default async function AvailabityAdminPage() {
         </div>
       </div>
 
-      {/* Time off */}
       <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
         <div className="p-5 sm:p-6">
           <h2 className="text-xl font-semibold">Time off</h2>
@@ -218,7 +217,6 @@ export default async function AvailabityAdminPage() {
             Block specific periods when you’re unavailable (stored in local).
           </p>
 
-          {/* Table */}
           <div className="mt-4 -mx-5 sm:mx-0">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -269,7 +267,6 @@ export default async function AvailabityAdminPage() {
             </div>
           </div>
 
-          {/* Add time off form */}
           <form action={addTimeOff} className="mt-5 border-t pt-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
               <label className="block">
@@ -332,7 +329,6 @@ export default async function AvailabityAdminPage() {
         </div>
       </div>
 
-      {/* Services & durations */}
       <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
         <div className="p-5 sm:p-6">
           <h2 className="text-xl font-semibold">Services</h2>
