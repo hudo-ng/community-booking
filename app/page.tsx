@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <section className="space-y-10">
@@ -25,17 +27,23 @@ export default function Home() {
           {
             title: "Search",
             desc: "Browse by category, ratings, and distance.",
+            href: "/services",
           },
-          { title: "Book", desc: "Pick a time that works for you." },
+          {
+            title: "Book",
+            desc: "Pick a time that works for you.",
+            href: "/services",
+          },
           {
             title: "Manage",
             desc: "Reschedule, cancel, and track appointments.",
+            href: "/admin",
           },
         ].map((item) => (
-          <div key={item.title} className="card">
+          <Link key={item.title} href={item.href} className="card">
             <h3 className="text-lg font-semibold">{item.title}</h3>
             <p className="mt-2 text-gray-600">{item.desc}</p>
-          </div>
+          </Link>
         ))}
       </div>
     </section>
