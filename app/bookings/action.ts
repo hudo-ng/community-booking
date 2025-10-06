@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "../../lib/db";
+import { enquequeBookingNotifications } from "@/lib/notifications";
 import z from "zod";
 
 export type BookingState = {
@@ -75,7 +76,6 @@ export default async function createBooking(
 
   const {
     serviceId,
-    providerId,
     providerSlug,
     slug,
     customerName,
@@ -123,7 +123,7 @@ export default async function createBooking(
     };
   }
 
-  await prisma.booking.create({
+  const newBooking = await prisma.booking.create({
     data: {
       serviceId,
       startAt,
@@ -135,6 +135,8 @@ export default async function createBooking(
       status: "PENDING",
     },
   });
+
+  await enquequeBookingNotifications(newBooking.id);
 
   revalidatePath(`/providers/${providerSlug}/services/${slug}`);
   return { ok: true, message: "Request sent! We’ll confirm by email shortly." };

@@ -26,6 +26,23 @@ enum BookingStatus {
   CONFIRMED
 }
 
+enum NotificationChannel {
+  EMAIL
+  SMS
+}
+
+enum NotificationKind {
+  BOOKING_CONFIRMATION
+  REMINDER_24H
+  REMINDER_2H
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
 model User {
   UserId String @id @default(uuid())
   email String @unique
@@ -90,9 +107,31 @@ model Booking {
   notes String?
   createdAt DateTime @default(now())
   idempotencyKey String? @unique
+  manageToken String? @unique
 
   @@index([serviceId, startAt])
   @@index([serviceId, endAt])
+  Notification Notification[]
+}
+
+model Notification {
+  id String @id @default(uuid())
+  bookingId String
+  booking Booking @relation(fields: [bookingId], references: [id])
+  channel NotificationChannel
+  kind NotificationKind
+  to String
+  runAt DateTime
+  sentAt DateTime?
+  status NotificationStatus @default(PENDING)
+  attempts Int @default(0)
+  lastError String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([bookingId, channel, kind])
+  @@index([status, runAt])
 }
 
 
