@@ -66,14 +66,12 @@ export default async function ServicePage({ searchParams }: Props) {
         </div>
       </header>
 
-      {/* Search / Filters */}
       <form
         method="get"
         role="search"
         className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm"
       >
         <div className="grid grid-cols-1 sm:grid-cols-[1fr,14rem,auto] gap-3">
-          {/* Search input */}
           <div className="relative">
             <input
               defaultValue={q}
@@ -97,7 +95,6 @@ export default async function ServicePage({ searchParams }: Props) {
             </svg>
           </div>
 
-          {/* Scope select */}
           <div className="relative">
             <select
               name="scope"
@@ -133,7 +130,6 @@ export default async function ServicePage({ searchParams }: Props) {
         </div>
       </form>
 
-      {/* Results */}
       {services.length === 0 ? (
         <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center text-gray-600">
           <div className="mx-auto mb-3 h-10 w-10 rounded-xl bg-gray-100 flex items-center justify-center">

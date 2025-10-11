@@ -91,7 +91,7 @@ export async function GET(req: Request) {
         b.endAt ??
         new Date(start.getTime() + (svc.defaultDurationMins ?? 60) * 60 * 1000);
 
-      const manageUrl = `${process.env.APP_URL}/bookings/${b.id}/manage?t=${
+      const manageUrl = `${process.env.APP_URL}/bookings/${b.id}/manage?token=${
         b.manageToken ?? ""
       }`;
 

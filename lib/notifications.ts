@@ -80,7 +80,7 @@ export async function enquequeBookingNotifications(bookingId: string) {
   await upsert("REMINDER_2H", t02);
 
   return {
-    manageUrl: `${process.env.APP_URL}/bookings/${booking.id}/manage?t=${token}`,
+    manageUrl: `${process.env.APP_URL}/bookings/${booking.id}/manage?token=${token}`,
     start,
     end,
   };
