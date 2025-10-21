@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -56,6 +50,11 @@ model User {
   timezone String @default("America/Edmonton")
   availability AvailabilityRules[]
   timeOff TimeOff[]
+  emailVerified DateTime?
+
+  EmailVerificationToken EmailVerificationToken[]
+
+  PasswordResetToken PasswordResetToken[]
 }
 
 model AvailabilityRules {
@@ -137,4 +136,26 @@ model Notification {
   @@index([status, runAt])
 }
 
+model EmailVerificationToken {
+  id String @id @default(uuid())
+  userId String
+  user User @relation(fields: [userId], references: [UserId], onDelete: Cascade)
+  tokenHash String
+  expiresAt DateTime
+  usedAt DateTime?
+  createdAt DateTime @default(now())
 
+  @@index([userId])
+}
+
+model PasswordResetToken {
+  id String @id @default(uuid())
+  userId String
+  user User @relation(fields: [userId], references: [UserId])
+  tokenHash String
+  exipresAt DateTime
+  usedAt DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
