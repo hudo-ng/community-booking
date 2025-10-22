@@ -1,8 +1,10 @@
 import { sendReset } from "./resetP-action";
+import ToasterFromSearchParams from "@/components/ToasterFromSearchParams";
 
 export default function ForgotPasswordPage() {
   return (
     <section className="flex min-h-[60vh] items-center justify-center px-4">
+      <ToasterFromSearchParams />
       <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <h1 className="text-center text-3xl font-semibold text-gray-900 dark:text-white">
           Forgot Password

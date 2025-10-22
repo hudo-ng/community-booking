@@ -22,27 +22,24 @@ export async function resetPassword(fd: FormData) {
 
   if (password !== confirm) {
     redirect(
-      `/reset/${token}?toast=error&msg=${encodeURIComponent(
-        "Passwords not match"
-      )}`
+      `/reset/${token}?t=error&m=${encodeURIComponent("Passwords not match")}`
     );
   }
 
   const pasred = PasswordSchema.safeParse(password);
   if (!pasred.success) {
     redirect(
-      `/reset/${token}?toast=error&msg=${encodeURIComponent(
+      `/reset/${token}?t=error&m=${encodeURIComponent(
         pasred.error.issues[0].message
       )}`
     );
   }
 
   const userId = await consumeResetPasswordToken(token);
+  console.log(userId);
   if (!userId) {
     redirect(
-      `/login?toast=error&msg=${encodeURIComponent(
-        "Invalid or expired reset link"
-      )}`
+      `/login?t=error&m=${encodeURIComponent("Invalid or expired reset link")}`
     );
   }
 
@@ -52,7 +49,7 @@ export async function resetPassword(fd: FormData) {
     data: { passwordHash: hash, emailVerified: new Date() },
   });
   redirect(
-    `/login?toast=success&msg=${encodeURIComponent(
+    `/login?t=success&m=${encodeURIComponent(
       "Password updated. Please sign in."
     )}`
   );

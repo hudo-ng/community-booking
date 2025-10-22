@@ -1,5 +1,6 @@
 "use client";
 
+import ToasterFromSearchParams from "@/components/ToasterFromSearchParams";
 import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -56,6 +57,7 @@ export default function LogInPage() {
 
   return (
     <section className="min-h-[100vh] bg-gray-50 grid place-items-center px-4">
+      <ToasterFromSearchParams />
       <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 space-y-6">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-800">Welcome Back</h1>
@@ -110,6 +112,12 @@ export default function LogInPage() {
           Don't have an account?{" "}
           <a href="/register" className="text-blue-600 hover:underline">
             Create one
+          </a>
+        </p>
+        <p className="text-center text-sm text-gray-500">
+          Forgot password?{" "}
+          <a href="/forgot-password" className="text-blue-600 hover:underline">
+            Reset password
           </a>
         </p>
       </div>

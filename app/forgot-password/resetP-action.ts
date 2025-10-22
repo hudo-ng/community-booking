@@ -18,14 +18,16 @@ export async function sendReset(fd: FormData) {
       to: email,
       subject: "Reset your password",
       html: `
-        <p>We received a request to reset your password.</p>
-        <p><a href="${url}">Click here to reset</a> (valid for 30 minutes)</p>
-        <p>If you didn't request this, you can ignore this email.</p>
-      `,
+      <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto">
+      <p>We received a request to reset your password.</p>
+      <p><a href="${url}">Click here to reset</a> (valid for 30 minutes).</p>
+      <p>If you didn't request this, you can ignore this email.</p>
+    </div>
+  `,
     });
   }
   redirect(
-    `forgot-password/?toast=sucess&msg=${encodeURIComponent(
+    `/forgot-password?t=info&m=${encodeURIComponent(
       "If the email exists, a reset link has been sent"
     )}`
   );

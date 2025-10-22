@@ -6,7 +6,7 @@ function sha256(input: string) {
 }
 
 function addMinutes(d: Date, mins: number) {
-  return new Date(d.getDate() + mins * 60000);
+  return new Date(d.getTime() + mins * 60000);
 }
 
 export async function createEmailVerificationToken(userId: string) {
@@ -64,17 +64,19 @@ export async function createPasswordResetToken(userId: string) {
 export async function consumeResetPasswordToken(raw: string) {
   const token = await prisma.passwordResetToken.findUnique({
     where: {
-      tokenHash: sha256(raw)
-    }
-  })
-  if (!token) return null
-  if(token.usedAt) return null
-  if(token.exipresAt < new Date()) return null
+      tokenHash: sha256(raw),
+    },
+  });
+  console.log(token);
+  if (!token) return null;
+  if (token.usedAt) return null;
+  if (token.exipresAt < new Date()) return null;
 
   await prisma.passwordResetToken.update({
-    where: {tokenHash: token.tokenHash},
+    where: { tokenHash: token.tokenHash },
     data: {
-      usedAt: new Date()
-    }
-  })
+      usedAt: new Date(),
+    },
+  });
+  return token.userId;
 }
