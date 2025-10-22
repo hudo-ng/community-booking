@@ -4,6 +4,8 @@ import { prisma } from "../../../lib/db";
 import z from "zod";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
+import { createEmailVerificationToken } from "@/lib/tokens";
+import { sendEmail } from "@/lib/mailer";
 
 export type RegisterState = {
   ok: boolean;
@@ -72,8 +74,19 @@ export default async function registerAction(
     return { ok: false, fieldErrors: { email: ["Email already in use"] } };
 
   const hashedPassword = await bcrypt.hash(password, 12);
-  await prisma.user.create({
+  const newUser = await prisma.user.create({
     data: { email, name, passwordHash: hashedPassword, role: "CUSTOMER" },
+  });
+  const rawToken = await createEmailVerificationToken(newUser.UserId);
+  const verifyURL = `${process.env.APP_URL}/verify/${rawToken}`;
+  await sendEmail({
+    to: newUser.email,
+    subject: "Verify your email",
+    html: `
+    <p>Hi ${newUser.name ?? ""},</p>
+    <p>Please verify your email to activate your account:</p>
+    <p><a href="${verifyURL}">${verifyURL}</a></p>
+    <p>This link expires in 24 hours.</p>`,
   });
 
   redirect("/login");

@@ -140,7 +140,7 @@ model EmailVerificationToken {
   id String @id @default(uuid())
   userId String
   user User @relation(fields: [userId], references: [UserId], onDelete: Cascade)
-  tokenHash String
+  tokenHash String @unique
   expiresAt DateTime
   usedAt DateTime?
   createdAt DateTime @default(now())
@@ -152,7 +152,7 @@ model PasswordResetToken {
   id String @id @default(uuid())
   userId String
   user User @relation(fields: [userId], references: [UserId])
-  tokenHash String
+  tokenHash String @unique
   exipresAt DateTime
   usedAt DateTime?
   createdAt DateTime @default(now())
