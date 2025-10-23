@@ -5,6 +5,7 @@ declare module "next-auth" {
     user: {
       id: string;
       role: "CUSTOMER" | "PROVIDER" | "ADMIN" | "SUPERADMIN";
+      emailVerified: Date?
     } & DefaultSession["user"];
   }
 
@@ -18,5 +19,6 @@ declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     role: "CUSTOMER" | "PROVIDER" | "ADMIN" | "SUPERADMIN";
+    emailVerified: Date?
   }
 }

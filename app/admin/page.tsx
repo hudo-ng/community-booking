@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import ToasterFromSearchParams from "@/components/ToasterFromSearchParams";
+import ResendVerificationButton from "@/components/VerificationButton";
 
 export const metadata = { title: "Admin Dashboard" };
 
@@ -19,6 +20,7 @@ export default async function AdminHome() {
   }
 
   const providerId = session.user.id;
+  const emailVerified = session.user.emailVerified;
 
   const now = new Date();
   const [serviceCount, pendingCount, upcomingCount] = await Promise.all([
@@ -43,6 +45,8 @@ export default async function AdminHome() {
       : role === "PROVIDER"
       ? "bg-blue-100 text-blue-800 border-blue-200"
       : "bg-gray-100 text-gray-800 border-gray-200";
+
+  if (!emailVerified) return <ResendVerificationButton />;
 
   return (
     <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-6 space-y-8">

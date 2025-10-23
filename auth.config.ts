@@ -32,6 +32,7 @@ export const authOptions: NextAuthOptions = {
           name: user.name,
           email: user.email,
           role: user.role,
+          emailVerified: user.emailVerified
         };
       },
     }),
@@ -41,6 +42,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = (user as any).id;
         token.role = (user as any).role;
+        token.emailVerified = (user as any).emailVerified
       }
       return token;
     },
@@ -53,6 +55,7 @@ export const authOptions: NextAuthOptions = {
           | "PROVIDER"
           | "ADMIN"
           | "SUPERADMIN";
+          (session.user as any).emailVerified = token.emailVerified
       }
       return session;
     },
