@@ -159,3 +159,13 @@ model PasswordResetToken {
 
   @@index([userId])
 }
+
+model EmailResendLog {
+  id        String   @id @default(uuid())
+  email     String
+  ipHash    String? 
+  createdAt DateTime @default(now())
+
+  @@index([email, createdAt])
+  @@index([ipHash, createdAt])
+}
