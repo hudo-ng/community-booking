@@ -41,7 +41,7 @@ export default async function ServicePage({ searchParams }: Props) {
   const where = q && orParts.length > 0 ? { OR: orParts } : undefined;
 
   const services = await prisma.service.findMany({
-    where,
+    where: { ...where, provider: { isActive: true } },
     orderBy: { createdAt: "desc" },
     include: { provider: { select: { UserId: true, name: true, slug: true } } },
     take: 10,

@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 import { createEmailVerificationToken } from "@/lib/tokens";
 import { sendEmail } from "@/lib/mailer";
+import { generateUniqueProviderSlug } from "@/lib/providerSlug";
 
 export type RegisterState = {
   ok: boolean;
@@ -74,8 +75,17 @@ export default async function registerAction(
     return { ok: false, fieldErrors: { email: ["Email already in use"] } };
 
   const hashedPassword = await bcrypt.hash(password, 12);
+
+  const slug = await generateUniqueProviderSlug(name);
+
   const newUser = await prisma.user.create({
-    data: { email, name, passwordHash: hashedPassword, role: "CUSTOMER" },
+    data: {
+      email,
+      name,
+      passwordHash: hashedPassword,
+      role: "CUSTOMER",
+      slug: slug ?? "provider",
+    },
   });
   const rawToken = await createEmailVerificationToken(newUser.UserId);
   const verifyURL = `${process.env.APP_URL}/verify/${rawToken}`;

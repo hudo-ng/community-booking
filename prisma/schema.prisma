@@ -51,6 +51,7 @@ model User {
   availability AvailabilityRules[]
   timeOff TimeOff[]
   emailVerified DateTime?
+  isActive Boolean @default(true)
 
   EmailVerificationToken EmailVerificationToken[]
 

@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { setUserRole } from "./action";
+import { setUserRole, setUserStatus } from "./action";
 import ToasterFromSearchParams from "@/components/ToasterFromSearchParams";
 
 export const metadata = { title: "User Management" };
@@ -54,6 +54,7 @@ export default async function UsersPage() {
                   <th className="py-2.5 px-3">Name</th>
                   <th className="py-2.5 px-3">Role</th>
                   <th className="py-2.5 px-3">Change</th>
+                  <th className="py-2.5 px-3">Active</th>
                 </tr>
               </thead>
 
@@ -108,6 +109,33 @@ export default async function UsersPage() {
                                      hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                           Save
+                        </button>
+                      </form>
+                    </td>
+
+                    <td className="py-2.5 px-3 align-middle">
+                      <form
+                        action={setUserStatus}
+                        className="flex items-center justify-center"
+                      >
+                        <input type="hidden" name="id" value={u.UserId} />
+
+                        <button
+                          type="submit"
+                          aria-label={`Toggle active status for ${u.email}`}
+                          className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out
+        ${
+          u.isActive
+            ? "bg-blue-600 hover:bg-blue-700"
+            : "bg-gray-300 hover:bg-gray-400"
+        }
+        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+                        >
+                          <span
+                            aria-hidden="true"
+                            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out
+          ${u.isActive ? "translate-x-5" : "translate-x-0"}`}
+                          />
                         </button>
                       </form>
                     </td>

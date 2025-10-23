@@ -62,3 +62,34 @@ export async function setUserRole(fd: FormData) {
     `/root/users?m=${encodeURIComponent("Role updated")}&t=success`
   );
 }
+
+export async function setUserStatus(fd: FormData) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user || session.user.role !== "SUPERADMIN") {
+    redirect(`/root/users?m=${encodeURIComponent("Forbidden")}&t=error`);
+  }
+
+  const userId = String(fd.get("id") || "");
+  if (!userId) {
+    redirect(
+      `/root/users?m=${encodeURIComponent("Provider Id not found")}&t=error`
+    );
+  }
+
+  const user = await prisma.user.findUnique({ where: { UserId: userId } });
+  if (!user) {
+    redirect(
+      `/root/users?m=${encodeURIComponent("Provider not found")}&t=error`
+    );
+  }
+
+  await prisma.user.update({
+    where: { UserId: userId },
+    data: {
+      isActive: !user.isActive,
+    },
+  });
+  revalidatePath(
+    `/root/users?m=${encodeURIComponent("Status updated")}&t=success`
+  );
+}
