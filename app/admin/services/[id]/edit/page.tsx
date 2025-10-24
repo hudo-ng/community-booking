@@ -5,17 +5,14 @@ import { prisma } from "@/lib/db";
 import { updateService, deleteService } from "../../action";
 import ToasterFromSearchParams from "@/components/ToasterFromSearchParams";
 
-interface PageProps {
-  params: { id: string };
-}
 
-export default async function EditServicePage({ params }: PageProps) {
+export default async function EditServicePage({ params }: any) {
   const s = await getServerSession(authOptions);
   if (!s?.user || !["PROVIDER", "ADMIN", "SUPERADMIN"].includes(s.user.role))
     redirect("/login");
 
   const providerId = s.user.id;
-  const svc = await prisma.service.findUnique({ where: { id: params.id } });
+  const svc = await prisma.service.findUnique({ where: { id: params?.id } });
   if (!svc || svc.providerId !== providerId) return notFound();
 
   return (
