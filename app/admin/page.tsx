@@ -46,7 +46,7 @@ export default async function AdminHome() {
       ? "bg-blue-100 text-blue-800 border-blue-200"
       : "bg-gray-100 text-gray-800 border-gray-200";
 
-  if (!emailVerified) return <ResendVerificationButton />;
+  // if (!emailVerified) return <ResendVerificationButton />; // to implement when own a domain
 
   return (
     <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-6 space-y-8">
