@@ -86,25 +86,36 @@ export default async function AdminBookingsPage() {
                     {b.status.toLowerCase()}
                   </span>
                 </td>
-                <td className="py-3 px-4 text-right">
+                <td className="py-2.5 px-4 text-right">
                   <form className="inline-flex gap-2">
                     <input type="hidden" name="id" value={b.id} />
+                    {b.endAt && b.endAt < new Date() ? (
+                      <div className="text-xs text-gray-400 italic select-none">
+                        Past appointment
+                      </div>
+                    ) : (
+                      <>
+                        <button
+                          formAction={setBookingStatus.bind(null, "CONFIRMED")}
+                          disabled={b.status === "CONFIRMED"}
+                          className="rounded-md bg-green-600 px-3 py-1.5 text-white text-xs font-semibold shadow-sm 
+                     hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500
+                     disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Confirm
+                        </button>
 
-                    <button
-                      formAction={setBookingStatus.bind(null, "CONFIRMED")}
-                      className="rounded-lg bg-green-600 px-3 py-1.5 text-white text-xs font-semibold shadow-sm 
-                             hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                    >
-                      Confirm
-                    </button>
-
-                    <button
-                      formAction={setBookingStatus.bind(null, "CANCELLED")}
-                      className="rounded-lg bg-red-600 px-3 py-1.5 text-white text-xs font-semibold shadow-sm 
-                             hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                    >
-                      Cancel
-                    </button>
+                        <button
+                          formAction={setBookingStatus.bind(null, "CANCELLED")}
+                          disabled={b.status === "CANCELLED"}
+                          className="rounded-md bg-red-600 px-3 py-1.5 text-white text-xs font-semibold shadow-sm 
+                     hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500
+                     disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    )}
                   </form>
                 </td>
               </tr>
