@@ -6,15 +6,16 @@ import { addDays, format } from "date-fns";
 import Slots from "@/components/Slots";
 
 type Props = {
-  params: {
+  params: Promise<{
     providerSlug: string;
     slug: string;
-  };
+  }>;
 };
 
 export async function generateMetadata({ params }: Props) {
+  const { providerSlug, slug } = await params;
   const provider = await prisma.user.findUnique({
-    where: { slug: params.providerSlug },
+    where: { slug: providerSlug },
   });
   if (!provider) return { title: "Service" };
 
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: Props) {
     where: {
       providerId_slug: {
         providerId: provider.UserId,
-        slug: params?.slug,
+        slug,
       },
     },
   });
@@ -33,8 +34,9 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function ServiceDetail({ params }: Props) {
+  const { slug, providerSlug } = await params;
   const provider = await prisma.user.findUnique({
-    where: { slug: params.providerSlug },
+    where: { slug: providerSlug },
   });
   if (!provider) return NotFound();
 
@@ -42,7 +44,7 @@ export default async function ServiceDetail({ params }: Props) {
     where: {
       providerId_slug: {
         providerId: provider.UserId,
-        slug: params.slug,
+        slug,
       },
     },
     include: { provider: true },
