@@ -5,11 +5,11 @@ import { prisma } from "@/lib/db";
 import { updateService, deleteService } from "../../action";
 import ToasterFromSearchParams from "@/components/ToasterFromSearchParams";
 
-export default async function EditServicePage({
-  params,
-}: {
+interface PageProps {
   params: { id: string };
-}) {
+}
+
+export default async function EditServicePage({ params }: PageProps) {
   const s = await getServerSession(authOptions);
   if (!s?.user || !["PROVIDER", "ADMIN", "SUPERADMIN"].includes(s.user.role))
     redirect("/login");
