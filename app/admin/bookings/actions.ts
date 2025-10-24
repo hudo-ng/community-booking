@@ -12,8 +12,6 @@ export async function setBookingStatus(
 ) {
   const session = await getServerSession(authOptions);
 
-  console.log(session);
-
   if (!session?.user || session.user.role !== "PROVIDER") {
     redirect("/login");
   }

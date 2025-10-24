@@ -4,12 +4,12 @@ import { prisma } from "../../lib/db";
 export const metadata = { title: "Services" };
 
 type Props = {
-  searchParams: { q?: string; scope?: "all" | "providers" | "services" };
+  searchParams: Promise<{ q?: string; scope?: "all" | "providers" | "services" }>;
 };
 
 export default async function ServicePage({ searchParams }: Props) {
-  const q = (searchParams.q ?? "").trim();
-  const scope = (searchParams.scope ?? "all").trim();
+  const {q} = await(searchParams ?? "");
+  const {scope} =  await (searchParams ?? "all");
 
   const serviceFields = q
     ? [

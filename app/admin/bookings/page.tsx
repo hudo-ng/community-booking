@@ -46,17 +46,25 @@ export default async function AdminBookingsPage() {
                 </td>
                 <td className="py-2 pr-4">{b.status}</td>
                 <td className="py-2 pr-4">
-                  <form action={setBookingStatus} className="inline-flex gap-2">
+                  <form
+                    action={async (formData) =>
+                      await setBookingStatus("CONFIRMED", formData)
+                    }
+                  >
                     <input type="hidden" name="id" value={b.id} />
                     <button
-                      formAction={setBookingStatus.bind(null, "CONFIRMED")}
+                      formAction={async (formData) =>
+                        await setBookingStatus("CONFIRMED", formData)
+                      }
                       className="px-2 py-1 rounded bg-green-600 text-white"
                     >
                       Confirm
                     </button>
 
                     <button
-                      formAction={setBookingStatus.bind(null, "CANCELLED")}
+                      formAction={async (formData) =>
+                        await setBookingStatus("CANCELLED", formData)
+                      }
                       className="px-2 py-1 rounded bg-red-600 text-white"
                     >
                       Cancel
