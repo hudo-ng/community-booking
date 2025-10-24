@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { cancelBooking, rescheduleBooking } from "./action";
 import ToasterFromSearchParams from "@/components/ToasterFromSearchParams";
 
-type Props = { params: { id: string }; searchParams: { token?: string } };
+type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ token?: string }> };
 
 function formatRangeInTz(start: Date, end: Date, tz: string) {
   const dFmt = new Intl.DateTimeFormat("en-US", {
