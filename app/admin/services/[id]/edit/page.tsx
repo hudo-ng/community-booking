@@ -5,9 +5,9 @@ import { prisma } from "@/lib/db";
 import { updateService, deleteService } from "../../action";
 import ToasterFromSearchParams from "@/components/ToasterFromSearchParams";
 
-interface Props {
-  params: { id: string };
-}
+type Props = {
+  params: Promise<{ id: string }>;
+};
 
 export default async function EditServicePage({ params }: Props) {
   const s = await getServerSession(authOptions);
@@ -15,7 +15,8 @@ export default async function EditServicePage({ params }: Props) {
     redirect("/login");
 
   const providerId = s.user.id;
-  const svc = await prisma.service.findUnique({ where: { id: params.id } });
+  const { id } = await params;
+  const svc = await prisma.service.findUnique({ where: { id } });
   if (!svc || svc.providerId !== providerId) return notFound();
 
   return (
