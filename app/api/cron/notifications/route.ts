@@ -1,22 +1,21 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendEmail } from "@/lib/mailer";
 import { buildBookingIcs } from "@/lib/ics";
-import { lte } from "zod";
 
-function formatInTz(d: Date, tz: string) {
-  return new Intl.DateTimeFormat("en-US", {
-    timeZone: tz,
-    weekday: "short",
-    year: "numeric",
-    month: "short",
-    day: "2-digit",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-    timeZoneName: "short",
-  }).format(d);
-}
+// function formatInTz(d: Date, tz: string) {
+//   return new Intl.DateTimeFormat("en-US", {
+//     timeZone: tz,
+//     weekday: "short",
+//     year: "numeric",
+//     month: "short",
+//     day: "2-digit",
+//     hour: "numeric",
+//     minute: "2-digit",
+//     hour12: true,
+//     timeZoneName: "short",
+//   }).format(d);
+// }
 
 function formatRangeInTz(start: Date, end: Date, tz: string) {
   const d = new Intl.DateTimeFormat("en-US", {
@@ -161,12 +160,13 @@ export async function GET(req: Request) {
       });
       sent++;
     } catch (err: any) {
+      const e = err as Error
       await prisma.notification.update({
         where: { id: j.id },
         data: {
           status: "FAILED",
           attempts: { increment: 1 },
-          lastError: String(err?.message ?? err),
+          lastError: String(e?.message ?? e),
         },
       });
       failed++;

@@ -23,6 +23,11 @@ const serviceSchema = z.object({
     .transform((v) => v || null),
 });
 
+interface ActionError {
+  message: string;
+  code?: string;
+}
+
 async function requireSession() {
   const session = await getServerSession(authOptions);
   if (
@@ -83,15 +88,16 @@ export async function createService(fd: FormData): Promise<void> {
         "Created"
       )}&t=success`
     );
-  } catch (e: any) {
-    if (e.code === "P2002") {
+  } catch (e) {
+    const err = e as ActionError
+    if (err.code === "P2002") {
       redirect(
         `/admin/services/new?m=${encodeURIComponent(
           "Slug taken, try again"
         )}&t=error`
       );
     }
-    throw e;
+    throw err;
   }
 }
 

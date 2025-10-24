@@ -54,7 +54,7 @@ export async function setUserRole(fd: FormData) {
   await prisma.user.update({
     where: { UserId: targetId },
     data: {
-      role: nextRole as any,
+      role: nextRole as "ADMIN" || "SUPERADMIN" || "CUSTOMER" || "PROVIDER",
     },
   });
 

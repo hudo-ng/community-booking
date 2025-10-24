@@ -47,13 +47,13 @@ export default async function AvailabityAdminPage() {
       hour12: true,
     }).format(d);
 
-  const fmtUtc = (d: Date) =>
-    new Intl.DateTimeFormat("en-US", {
-      timeZone: "UTC",
-      dateStyle: "medium",
-      timeStyle: "short",
-      hour12: true,
-    }).format(d);
+  // const fmtUtc = (d: Date) =>
+  //   new Intl.DateTimeFormat("en-US", {
+  //     timeZone: "UTC",
+  //     dateStyle: "medium",
+  //     timeStyle: "short",
+  //     hour12: true,
+  //   }).format(d);
 
   return (
     <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-6 lg:py-10 space-y-10">

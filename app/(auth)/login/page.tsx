@@ -4,20 +4,7 @@ import ToasterFromSearchParams from "@/components/ToasterFromSearchParams";
 import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useFormStatus } from "react-dom";
 
-function SubmitBtn() {
-  const { pending } = useFormStatus();
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2 px-4 rounded-xl transition"
-    >
-      {pending ? "Logging in..." : "Log In"}
-    </button>
-  );
-}
 
 export default function LogInPage() {
   const [loading, setLoading] = useState(false);

@@ -14,7 +14,7 @@ export default async function EditServicePage({ params }: Props) {
   if (!s?.user || !["PROVIDER", "ADMIN", "SUPERADMIN"].includes(s.user.role))
     redirect("/login");
 
-  const providerId = (s.user as any).UserId ?? s.user.id;
+  const providerId = s.user.id;
   const svc = await prisma.service.findUnique({ where: { id: params.id } });
   if (!svc || svc.providerId !== providerId) return notFound();
 

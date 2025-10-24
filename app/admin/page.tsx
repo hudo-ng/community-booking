@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import ToasterFromSearchParams from "@/components/ToasterFromSearchParams";
-import ResendVerificationButton from "@/components/VerificationButton";
 
 export const metadata = { title: "Admin Dashboard" };
 
@@ -20,7 +19,7 @@ export default async function AdminHome() {
   }
 
   const providerId = session.user.id;
-  const emailVerified = session.user.emailVerified;
+  // const emailVerified = session.user.emailVerified;
 
   const now = new Date();
   const [serviceCount, pendingCount, upcomingCount] = await Promise.all([

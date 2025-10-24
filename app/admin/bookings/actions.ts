@@ -31,7 +31,7 @@ export async function setBookingStatus(
 
   await prisma.booking.update({
     where: { id },
-    data: { status: status as any },
+    data: { status},
   });
   revalidatePath("/admin/bookings");
 }

@@ -8,6 +8,7 @@ export default function ContactPage() {
   );
 
   async function handleSubmit(formData: FormData) {
+    alert(`Form received: ${formData.get("message") || ""}`)
     setStatus("loading");
     await new Promise((res) => setTimeout(res, 500));
     setStatus("sent");

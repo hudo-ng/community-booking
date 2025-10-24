@@ -7,7 +7,7 @@ import { tooManyRecent, hashIp, logResend } from "@/lib/rateLimit";
 import { authOptions } from "@/auth.config";
 import { getServerSession } from "next-auth";
 
-export async function POST(req: Request) {
+export async function POST() {
   try {
     const session = await getServerSession(authOptions);
     const sessionEmail = session?.user?.email as string | undefined;
@@ -67,7 +67,7 @@ export async function POST(req: Request) {
       ok: true,
       message: "If an account exists, we sent a verification email.",
     });
-  } catch (e) {
+  } catch {
     return NextResponse.json({
       ok: true,
       message: "If an account exists, we sent a verification email.",
