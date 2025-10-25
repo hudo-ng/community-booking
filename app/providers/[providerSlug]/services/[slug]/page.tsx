@@ -2,7 +2,8 @@ import NotFound from "@/app/not-found";
 import { prisma } from "../../../../../lib/db";
 import BookingWidget from "@/components/BookingWidget";
 import { generateSlots } from "@/lib/availability";
-import { addDays, format } from "date-fns";
+import { addDays } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import Slots from "@/components/Slots";
 
 type Props = {
@@ -64,7 +65,7 @@ export default async function ServiceDetail({ params }: Props) {
   const days = await Promise.all(
     Array.from({ length: 14 }).map(async (_, i) => {
       const d = addDays(new Date(), i);
-      const ymd = format(d, "yyyy-MM-dd");
+      const ymd = formatInTimeZone(d, providerTz, "yyyy-MM-dd");
       const iso = await generateSlots({
         providerId: service.providerId,
         serviceId: service.id,
