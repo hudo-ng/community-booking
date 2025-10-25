@@ -22,19 +22,11 @@ export default function LogInPage() {
 
     const password = String(fd.get("password") || "");
 
-    const session = await getSession();
-    const role = session?.user.role;
-
     const res = await signIn("credentials", {
       redirect: true,
       email,
       password,
-      callbackUrl:
-        role === "SUPERADMIN"
-          ? "/root/users"
-          : role === "PROVIDER"
-          ? "/admin"
-          : "/",
+      callbackUrl: "/",
     });
 
     // if (res?.error) {
