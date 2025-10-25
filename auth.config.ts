@@ -12,6 +12,7 @@ const LoginSchema = z.object({
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: "jwt" },
+  jwt: { maxAge: 60 * 60 * 24 * 30 },
   providers: [
     Credentials({
       name: "Email & Password",
@@ -32,7 +33,7 @@ export const authOptions: NextAuthOptions = {
           name: user.name,
           email: user.email,
           role: user.role,
-          emailVerified: user.emailVerified
+          emailVerified: user.emailVerified,
         };
       },
     }),
@@ -42,7 +43,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = (user as any).id;
         token.role = (user as any).role;
-        token.emailVerified = (user as any).emailVerified
+        token.emailVerified = (user as any).emailVerified;
       }
       return token;
     },
@@ -55,7 +56,7 @@ export const authOptions: NextAuthOptions = {
           | "PROVIDER"
           | "ADMIN"
           | "SUPERADMIN";
-          (session.user as any).emailVerified = token.emailVerified
+        (session.user as any).emailVerified = token.emailVerified;
       }
       return session;
     },

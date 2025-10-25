@@ -5,7 +5,6 @@ import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-
 export default function LogInPage() {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -33,12 +32,14 @@ export default function LogInPage() {
       setErr("Invalid email or password");
       setLoading(false);
     } else if (res?.ok) {
-      const session = await getSession();
-      session?.user.role === "CUSTOMER"
-        ? router.push("/")
-        : session?.user.role === "SUPERADMIN"
-        ? router.push("/root/users")
-        : router.push("/admin");
+      setTimeout(async () => {
+        const session = await getSession();
+        session?.user.role === "CUSTOMER"
+          ? router.push("/")
+          : session?.user.role === "SUPERADMIN"
+          ? router.push("/root/users")
+          : router.push("/admin");
+      }, 400);
     }
   }
 
