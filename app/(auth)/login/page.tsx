@@ -22,25 +22,34 @@ export default function LogInPage() {
 
     const password = String(fd.get("password") || "");
 
+    const session = await getSession();
+    const role = session?.user.role;
+
     const res = await signIn("credentials", {
-      redirect: false,
+      redirect: true,
       email,
       password,
+      callbackUrl:
+        role === "SUPERADMIN"
+          ? "/root/users"
+          : role === "PROVIDER"
+          ? "/admin"
+          : "/",
     });
 
-    if (res?.error) {
-      setErr("Invalid email or password");
-      setLoading(false);
-    } else if (res?.ok) {
-      setTimeout(async () => {
-        const session = await getSession();
-        session?.user.role === "CUSTOMER"
-          ? router.push("/")
-          : session?.user.role === "SUPERADMIN"
-          ? router.push("/root/users")
-          : router.push("/admin");
-      }, 400);
-    }
+    // if (res?.error) {
+    //   setErr("Invalid email or password");
+    //   setLoading(false);
+    // } else if (res?.ok) {
+    //   setTimeout(async () => {
+    //     const session = await getSession();
+    //     session?.user.role === "CUSTOMER"
+    //       ? router.push("/")
+    //       : session?.user.role === "SUPERADMIN"
+    //       ? router.push("/root/users")
+    //       : router.push("/admin");
+    //   }, 400);
+    // }
   }
 
   return (
