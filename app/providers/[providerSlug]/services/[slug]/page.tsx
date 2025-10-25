@@ -3,7 +3,7 @@ import { prisma } from "../../../../../lib/db";
 import BookingWidget from "@/components/BookingWidget";
 import { generateSlots } from "@/lib/availability";
 import { addDays } from "date-fns";
-import { formatInTimeZone, toZonedTime } from "date-fns-tz";
+import { formatInTimeZone, toZonedTime,  fromZonedTime } from "date-fns-tz";
 import Slots from "@/components/Slots";
 
 type Props = {

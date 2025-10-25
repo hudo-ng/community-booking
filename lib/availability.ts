@@ -20,7 +20,7 @@ type slotParams = {
 export async function generateSlots(p: slotParams) {
   const lead = p.leadMinutes ?? 60;
 
-  const dateLocal = new Date(`${p.date}T00:00:00`);
+  const dateLocal = fromZonedTime(`${p.date}T00:00:00`, p.providerTz);
   const weekday = toZonedTime(dateLocal, p.providerTz).getDay();
 
   const rules = await prisma.availabilityRules.findMany({
